@@ -6,6 +6,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"chatgpt/config"
 	"strings"
+	"io/ioutil"
+	"log"
 )
 
 /*
