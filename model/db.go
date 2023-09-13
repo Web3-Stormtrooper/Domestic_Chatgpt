@@ -5,6 +5,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"chatgpt/config"
+	"strings"
 )
 
 /*
@@ -22,6 +23,13 @@ func ConnectDB() {
         fmt.Println(err)
     }
     fmt.Println("connect success")
+
+    // 读取 SQL 脚本内容
+	sqlScript, err := ioutil.ReadFile("database/db.sql")
+	if err != nil {
+		log.Fatal(err)
+	}
+
     // 执行 SQL 脚本
 
 	statements := strings.Split(string(sqlScript), ";")
