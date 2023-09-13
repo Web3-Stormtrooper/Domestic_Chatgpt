@@ -27,7 +27,7 @@ func ConnectDB() {
     fmt.Println("connect success")
 
     // 读取 SQL 脚本内容
-	sqlScript, err := ioutil.ReadFile("database/db.sql")
+	sqlScript, err := ioutil.ReadFile("/usr/school/chatgpt2/database/db.sql")
 	if err != nil {
 		log.Fatal(err)
 	}
