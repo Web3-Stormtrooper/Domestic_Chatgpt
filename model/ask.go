@@ -107,7 +107,7 @@ func Ask(requestData *Ask_req) (string, error) {
 func api(message string) (string, error) {
 	postInfo := config.GetOpenaiInfo()
 	url := postInfo.Openai.Url
-		fmt.Println("testConfig", postInfo.Openai.Authorization)
+	fmt.Println("testConfig", postInfo.Openai.Authorization)
 	var messages []Session
 	if message != "" {
 		err := json.Unmarshal([]byte(message), &messages)
