@@ -107,6 +107,7 @@ func Ask(requestData *Ask_req) (string, error) {
 func api(message string) (string, error) {
 	postInfo := config.GetOpenaiInfo()
 	url := postInfo.Openai.Url
+		fmt.Println("testConfig", postInfo.Openai.Authorization)
 	var messages []Session
 	if message != "" {
 		err := json.Unmarshal([]byte(message), &messages)
@@ -150,12 +151,3 @@ func api(message string) (string, error) {
 	return answer, err
 }
 
-// 定义代理地址，可以根据实际情况设置代理地址
-func proxyURL() *url.URL {
-	proxyStr := "http://127.0.0.1:7890" // 替换为你的代理地址和端口
-	proxyURL, err := url.Parse(proxyStr)
-	if err != nil {
-		log.Fatal("Error parsing proxy URL:", err)
-	}
-	return proxyURL
-}
