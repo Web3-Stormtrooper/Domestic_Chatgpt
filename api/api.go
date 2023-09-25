@@ -10,7 +10,7 @@ import (
 func Ask(c *gin.Context) {
 
 	var requestData model.Ask_req
-	err := c.ShouldBindJSON(&requestData)
+		err := c.ShouldBindJSON(&requestData)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -29,6 +29,7 @@ func Ask(c *gin.Context) {
 			{Answer: answer}},
 	}
 	c.JSON(http.StatusOK, res)
+
 
 }
 
