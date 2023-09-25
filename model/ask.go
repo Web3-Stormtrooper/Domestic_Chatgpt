@@ -5,9 +5,7 @@ import (
 	"chatgpt/config"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
-	"net/url"
 )
 
 type Ask_req struct {
