@@ -27,13 +27,19 @@ type ApiOpenaiInfo struct {
 	}
 }
 
+var configFileContent []byte
+
+func init() {
+	var err error
+	configFileContent, err = ioutil.ReadFile("config/config.yaml")
+	if err != nil {
+		log.Fatalf("读取配置文件失败 #%v", err)
+	}
+}
+
 func GetDbInfo() *DbInfo {
 	var dbInfo DbInfo
-	File, err := ioutil.ReadFile("config/config.yaml")
-	if err != nil {
-		log.Printf("读取配置文件失败 #%v", err)
-	}
-	err = yaml.Unmarshal(File, &dbInfo)
+	err := yaml.Unmarshal(configFileContent, &dbInfo)
 	if err != nil {
 		log.Fatalf("解析失败: %v", err)
 	}
@@ -42,13 +48,10 @@ func GetDbInfo() *DbInfo {
 
 func GetOpenaiInfo() *ApiOpenaiInfo {
 	var openaiInfo ApiOpenaiInfo
-	File, err := ioutil.ReadFile("config/config.yaml")
-	if err != nil {
-		log.Printf("读取配置文件失败 #%v", err)
-	}
-	err = yaml.Unmarshal(File, &openaiInfo)
+	err := yaml.Unmarshal(configFileContent, &openaiInfo)
 	if err != nil {
 		log.Fatalf("解析失败: %v", err)
 	}
 	return &openaiInfo
 }
+
