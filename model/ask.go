@@ -2,10 +2,10 @@ package model
 
 import (
 	"bytes"
+	"chatgpt/config"
 	"encoding/json"
 	"fmt"
 	"log"
-	"chatgpt/config"
 	"net/http"
 	"net/url"
 )
@@ -87,8 +87,11 @@ func Ask(requestData *Ask_req) (string, error) {
 		return "", err
 	}
 
-	answer := api(string(JSON_str))
-	
+	answer, err := api(string(JSON_str))
+	if err != nil {
+		return "", err
+	}
+
 	msgSize := len(question) + len(answer)
 
 	_, err = DB.Exec("INSERT INTO t_session_detail (session_id, user_id, question, answer, msgSize) VALUES (?, ?, ?, ?, ?)",
@@ -101,30 +104,31 @@ func Ask(requestData *Ask_req) (string, error) {
 	return answer, nil
 
 }
-func api(message string) string {
+func api(message string) (string, error) {
 	postInfo := config.GetOpenaiInfo()
 	url := postInfo.Openai.Url
 	var messages []Session
 	if message != "" {
 		err := json.Unmarshal([]byte(message), &messages)
 		if err != nil {
-			return ""
+			return "", err
 		}
 	}
 	headers := make(map[string]string)
 	headers["Content-Type"] = postInfo.Openai.ConetType
-	headers["Authorization"] = postInfo.Openai.Authorization 
+	headers["Authorization"] = postInfo.Openai.Authorization
 	body := map[string]interface{}{
 		"model":    postInfo.Openai.Model,
 		"messages": messages,
 	}
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
-		return ""
+		return "", err
 	}
+
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBody))
 	if err != nil {
-		return ""
+		return "", err
 	}
 	for key, value := range headers {
 		req.Header.Set(key, value)
@@ -132,17 +136,18 @@ func api(message string) string {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return ""
+		fmt.Println("errtest1:", err)
+		return "", err
 	}
 	defer resp.Body.Close()
 
 	var result Json
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
-		return ""
+		return "", err
 	}
 	answer := result.Choices[0].Message.Content
-	return answer
+	return answer, err
 }
 
 // 定义代理地址，可以根据实际情况设置代理地址
