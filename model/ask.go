@@ -115,7 +115,7 @@ func api(message string) (string, error) {
 	}
 	headers := make(map[string]string)
 	headers["Content-Type"] = postInfo.Openai.ConetType
-	headers["Authorization"] = postInfo.Openai.Authorization
+	headers["Authorization"] = "Bearer "+ postInfo.Openai.Authorization
 	body := map[string]interface{}{
 		"model":    postInfo.Openai.Model,
 		"messages": messages,
