@@ -11,19 +11,19 @@ import (
 */
 type DbInfo struct {
 	Mysql struct {
-		User     string `yaml: "user"`
-		Port     string `yaml: "port"`
-		Password string `yaml: "password"`
-		Host     string `yaml: "host"`
-		Dbname   string `yaml: "dbname"`
+		User     string `yaml:"user"`
+		Port     string `yaml:"port"`
+		Password string `yaml:"password"`
+		Host     string `yaml:"host"`
+		Dbname   string `yaml:"dbname"`
 	}
 }
 type ApiOpenaiInfo struct {
 	Openai struct {
-		Url           string `yaml: "url"`
-		ConetType     string `yaml: "content-type"`
-		Authorization string `yaml: "authorization"`
-		Model         string `yaml: "model"`
+		Url           string `yaml:"url"`
+		ConetType     string `yaml:"content-type"`
+		Authorization string `yaml:"authorization"`
+		Model         string `yaml:"model"`
 	}
 }
 
