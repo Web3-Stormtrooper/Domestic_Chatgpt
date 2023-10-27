@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"io/ioutil"
+
 )
 
 type Ask_req struct {
@@ -119,11 +121,14 @@ func api(message string) (string, error) {
 		"model":    postInfo.Openai.Model,
 		"messages": messages,
 	}
+
+	fmt.Println(body)
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
 		return "", err
 	}
 
+       
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return "", err
@@ -138,6 +143,19 @@ func api(message string) (string, error) {
 		return "", err
 	}
 	defer resp.Body.Close()
+        //回复的状态码不对的错误处理
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Println("readerror:",err)
+			return "", err
+		}
+		errorMessage := string(bodyBytes)
+		// 输出或记录错误消息
+		fmt.Println(" askError:", errorMessage)
+		return "", err
+	}
+
 	var result Json
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
